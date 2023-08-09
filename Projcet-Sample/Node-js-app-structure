@@ -1,0 +1,18 @@
+my-node-app/
+|-- .git/
+|-- node_modules/
+|-- public/
+|   |-- images/
+|   |-- stylesheets/
+|   |   |-- main.css
+|   |-- index.html
+|-- routes/
+|   |-- index.js
+|-- views/
+|   |-- layout.pug
+|   |-- index.pug
+|-- .gitignore
+|-- app.js
+|-- package.json
+|-- package-lock.json
+|-- README.md
