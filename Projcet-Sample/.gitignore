@@ -1,2 +1,124 @@
-node_modules/
+# Log files
 *.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Directory used by tools like java for temporary files
+/tmp/
+
+# Compiled files
+*.class
+*.o
+*.a
+*.so
+*.exe
+*.dll
+*.dylib
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor backup and generated files
+*.swp
+*.swo
+*.swn
+*~ 
+*.bak
+*.sublime*
+*.code-workspace
+.vscode/
+.idea/
+
+# Node modules and debug logs
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Environment variables
+.env
+
+# Python generated files
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+__pycache__/
+
+# Ruby gems
+*.gem
+/.config
+/db/*.sqlite3
+/db/*.sqlite3-journal
+*.rbc
+capybara-*.html
+.rspec
+/log/
+/tmp/
+/public/system/
+/coverage/
+/spec/tmp/
+**.orig
+rerun.txt
+pickle-email-*.html
+
+# Database
+*.db
+*.sqlite
+
+# Java build files
+target/
+*.war
+*.ear
+
+# macOS Finder
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Windows Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# Windows installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# JetBrains IDE
+.idea/
+
+# ASP.NET
+bin/
+obj/
+*.suo
+*.user
+*.pfx
+*.csproj.user
+*.publishsettings
+
+# Virtual environments
+*.env
+*.venv
+*.virtualenvs/
+
+# Package manager directories
+bower_components/
