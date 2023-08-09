@@ -1,0 +1,107 @@
+pipeline {
+    agent none
+
+    environment {
+        // Setting up environment variables for Docker Image and Credentials
+        DOCKER_IMAGE = "my-app-image:${env.BUILD_ID}"
+        DOCKER_CREDENTIALS = "DockerHubCredentials"
+    }
+
+    stages {
+        // Checkout code from SCM
+        stage('Checkout') {
+            agent any
+            steps {
+                // Cloning the repository
+                checkout scm
+            }
+        }
+        
+        // Build the Docker image
+        stage('Build Docker Image') {
+            agent any
+            steps {
+                script {
+                    // Pushing the built image to the Docker registry
+                    docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_CREDENTIALS}") {
+                        // Building the Docker image using the current build ID as a tag
+                        def appImage = docker.build("${DOCKER_IMAGE}")
+                    }
+                }
+            }
+        }
+
+        // Test the code inside the Docker container
+        stage('Test') {
+            agent {
+                docker {
+                    image "${DOCKER_IMAGE}"
+                    args "--entrypoint ''"
+                }
+            }
+            steps {
+                sh '''
+                echo "Running tests inside Docker container..."
+                npm install  // Installing required npm packages
+                npm test     // Running tests
+                '''
+            }
+        }
+
+        // Push the Docker image to DockerHub
+        stage('Push to DockerHub') {
+            agent any
+            steps {
+                script {
+                    // Pushing the Docker image to DockerHub
+                    docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_CREDENTIALS}") {
+                        docker.image("${DOCKER_IMAGE}").push()
+                    }
+                }
+            }
+        }
+
+        // Deploying the application
+        stage('Deploy') {
+            agent any
+            when {
+                branch 'main'  // Deploy only if it's the 'main' branch
+            }
+            steps {
+                echo 'Deploying...'
+                sh '''
+                echo "Deploying using docker compose or any other method"
+                // Example: docker-compose up -d
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            // Removing the Docker image after the build
+            sh "docker rmi ${DOCKER_IMAGE}"
+            // Notifying Slack about the build completion
+            slackSend (
+                channel: "#jenkins-notifications",
+                color: "warning",
+                message: "Build ${env.BUILD_ID} completed with status: ${currentBuild.result}"
+            )
+        }
+        failure {
+            echo 'Something went wrong!'  // If there was an error during the build
+        }
+        success {
+            echo 'Build and Deployment completed successfully!'  // If the build was successful
+        }
+        started {
+            // Notifying Slack when the build starts
+            slackSend (
+                channel: "#jenkins-notifications",
+                color: "good",
+                message: "Build ${env.BUILD_ID} has started"
+            )
+        }
+    }
+}
